@@ -6,11 +6,10 @@ export default function Gallery() {
     const [selectedCategory, setSelectedCategory] = useState<Artwork["category"] | "all">("all");
     const [artworks, setArtworks] = useState<Artwork[]>([]);
 
-    const categories: Array<"animation" | "illustration" | "design" | "photography"> = [
+    const categories: Array<"animation" | "illustration" | "3D model"> = [
         "animation",
         "illustration",
-        "design",
-        "photography",
+        "3D model"
     ];
 
     const filteredArtworks =
