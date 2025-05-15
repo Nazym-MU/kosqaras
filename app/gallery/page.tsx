@@ -1,10 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Artwork } from "../../types/artwork";
 
 export default function Gallery() {
     const [selectedCategory, setSelectedCategory] = useState<Artwork["category"] | "all">("all");
     const [artworks, setArtworks] = useState<Artwork[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     const categories: Array<"animation" | "illustration" | "3D model"> = [
         "animation",
@@ -12,8 +14,31 @@ export default function Gallery() {
         "3D model"
     ];
 
+    useEffect(() => {
+        async function fetchArtworks() {
+            try {
+                const response = await fetch(`/api/artworks?category=${selectedCategory}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch artworks');
+                }
+                const data = await response.json();
+                setArtworks(data);
+                setIsLoading(false);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'An unknown error occurred');
+                setIsLoading(false);
+            }
+        }
+
+        fetchArtworks();
+    }, [selectedCategory]);
+
     const filteredArtworks =
         selectedCategory === "all" ? artworks : artworks.filter((artwork) => artwork.category === selectedCategory);
+
+    if (isLoading) return <p className="text-center mt-6">Loading artworks...</p>;
+    if (error) return <p className="text-center text-red-500 mt-6">{error}</p>;
+
 
     return (
         <div className="p-6 max-w-5xl mx-auto">
