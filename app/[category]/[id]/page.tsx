@@ -1,46 +1,39 @@
-"use client";
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import connectDB from '@/lib/mongodb';
+import Artwork from '@/app/models/Artwork';
+import { notFound } from 'next/navigation';
+import { isValidObjectId } from 'mongoose';
 
-interface Artwork {
-    id: string;
-    title: string;
-    imageUrl: string;
-    category: string;
-    description: string;
-    date: string;
-    media: string;
-    additionalInfo?: string;
-}
+type Props = {
+    params: {
+        category: string;
+        id: string;
+    };
+};
 
-export default function ArtworkPage({ params }: { params: { category: string; id: string } }) {
-    const [artwork, setArtwork] = useState<Artwork | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        async function fetchArtwork() {
-            try {
-                const response = await fetch(`/api/artworks/${params.id}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch artwork');
-                }
-                const data = await response.json();
-                setArtwork(data);
-                setIsLoading(false);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'An unknown error occurred');
-                setIsLoading(false);
-            }
+export default async function ArtworkPage({ params }: Props) {
+    await connectDB();
+    
+    // Validate that id is a valid MongoDB ObjectId before querying
+    if (!params.id || !isValidObjectId(params.id)) {
+        console.error('Invalid ObjectId:', params.id);
+        return notFound();
+    }
+    
+    let artwork = null;
+    
+    try {
+        artwork = await Artwork.findById(params.id);
+        
+        if (!artwork) {
+            console.log(`Artwork with ID ${params.id} not found`);
+            return notFound();
         }
-
-        fetchArtwork();
-    }, [params.id]);
-
-    if (isLoading) return <p className="text-center mt-6">Loading artwork...</p>;
-    if (error) return <p className="text-center text-red-500 mt-6">{error}</p>;
-    if (!artwork) return <p className="text-center mt-6">Artwork not found</p>;
+    } catch (err) {
+        console.error('Error fetching artwork:', err);
+        return notFound();
+    }
 
     return (
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

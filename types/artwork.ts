@@ -1,8 +1,12 @@
 export interface Artwork {
-    id: string;
+    _id: string;
+    id?: string; // For backward compatibility
     title: string;
     description: string;
-    category: 'animation' | 'illustration' | '3D model';
+    category: 'animation' | 'illustration' | 'storyboard' | '3D model';
     imageUrl: string;
-    createdAt: Date;
+    date: string;
+    media: string;
+    additionalInfo?: string;
+    createdAt?: Date;
 }

@@ -6,20 +6,23 @@ if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable.');
 }
 
-interface GlobalWithMongoose extends Record<string, any> {
-  mongoose?: any;
+interface GlobalWithMongoose {
+  mongoose?: {
+    conn?: typeof mongoose;
+    promise?: Promise<typeof mongoose>;
+  };
 }
 
-let cached = (global as GlobalWithMongoose).mongoose;
+let cached = (global as unknown as GlobalWithMongoose).mongoose || { conn: undefined, promise: undefined };
 
 if (!cached) {
-  cached = mongoose;
-  (global as GlobalWithMongoose).mongoose = cached;
+  cached = { conn: undefined, promise: undefined };
+  (global as unknown as GlobalWithMongoose).mongoose = cached;
 }
 
 async function connectDB() {
     if (cached.conn) {
-        return  cached.conn;
+        return cached.conn;
     }
 
     if (!cached.promise) {
@@ -27,7 +30,7 @@ async function connectDB() {
             bufferCommands: false,
         };
 
-        cached.promise = cached.connect(MONGODB_URI, opts).then((mongoose: typeof import("mongoose")) => {
+        cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
             return mongoose;
         });
     }
@@ -37,7 +40,7 @@ async function connectDB() {
         return cached.conn;
     }
     catch (err) {
-        cached.promise = null;
+        cached.promise = undefined;
         throw err;
     }
 }

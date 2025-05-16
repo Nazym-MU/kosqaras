@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Artwork } from "../../types/artwork";
 
 export default function Gallery() {
@@ -8,16 +9,17 @@ export default function Gallery() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const categories: Array<"animation" | "illustration" | "3D model"> = [
+    const categories: Array<"animation" | "illustration" | "storyboard" | "3D model"> = [
         "animation",
         "illustration",
+        "storyboard",
         "3D model"
     ];
 
     useEffect(() => {
         async function fetchArtworks() {
             try {
-                const response = await fetch(`/api/artworks?category=${selectedCategory}`);
+                const response = await fetch(`/api/artworks?category=${selectedCategory !== "all" ? selectedCategory : ""}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch artworks');
                 }
@@ -67,8 +69,16 @@ export default function Gallery() {
             {filteredArtworks.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     {filteredArtworks.map((artwork) => (
-                        <div key={artwork.id} className="artwork-item rounded-lg shadow-md overflow-hidden">
-                            <img src={artwork.imageUrl} alt={artwork.title} className="w-full h-auto rounded-lg" />
+                        <div key={artwork._id || artwork.id} className="artwork-item rounded-lg shadow-md overflow-hidden">
+                            <div className="relative w-full h-60">
+                                <Image 
+                                    src={artwork.imageUrl} 
+                                    alt={artwork.title} 
+                                    fill
+                                    style={{ objectFit: 'cover' }}
+                                    className="rounded-lg"
+                                />
+                            </div>
                         </div>
                     ))}
                 </div>

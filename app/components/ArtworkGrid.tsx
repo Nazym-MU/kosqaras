@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 interface Artwork {
-    id: string;
+    _id: string;
     title: string;
     imageUrl: string;
     category: string;
@@ -28,9 +28,11 @@ export default function ArtworkGrid({ category }: ArtworkGridProps) {
                     throw new Error('Failed to fetch artworks');
                 }
                 const data = await response.json();
+                console.log('Fetched artworks:', data);
                 setArtworks(data);
                 setIsLoading(false);
             } catch (err) {
+                console.error('Error fetching artworks:', err);
                 setError(err instanceof Error ? err.message : 'An unknown error occurred');
                 setIsLoading(false);
             }
@@ -41,11 +43,12 @@ export default function ArtworkGrid({ category }: ArtworkGridProps) {
 
     if (isLoading) return <p className="text-center mt-6">Loading artworks...</p>;
     if (error) return <p className="text-center text-red-500 mt-6">{error}</p>;
+    if (artworks.length === 0) return <p className="text-center mt-6">No artworks found for this category.</p>;
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {artworks.map((artwork) => (
-                <Link href={`/${category}/${artwork.id}`} key={artwork.id}>
+                <Link href={`/${category}/${artwork._id}`} key={artwork._id}>
                     <div className="group cursor-pointer">
                         <div className="relative w-full h-64 mb-4 rounded-lg overflow-hidden">
                             <Image
