@@ -1,5 +1,15 @@
 import mongoose from 'mongoose';
 
+// Define a schema for multilingual content
+const multilingualStringSchema = new mongoose.Schema({
+    en: {
+        type: String,
+        required: true,
+    },
+    kz: String,
+    ru: String,
+}, { _id: false });
+
 const artworkSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -7,14 +17,14 @@ const artworkSchema = new mongoose.Schema({
     },
     imageUrl: {
         type: String,
-        required: function(this: any) {
+        required: function(this: { category: string, videoUrl?: string }) {
             // imageUrl is only required for non-animations or if no videoUrl is provided
             return this.category !== 'animation' || !this.videoUrl;
         },
     },
     videoUrl: {
         type: String,
-        required: function(this: any) {
+        required: function(this: { category: string }) {
             // videoUrl is required for animations
             return this.category === 'animation';
         },
@@ -25,7 +35,7 @@ const artworkSchema = new mongoose.Schema({
         enum: ['illustration', 'animation', 'storyboard'],
     },
     description: {
-        type: String,
+        type: multilingualStringSchema,
         required: true,
     },
     date: {
@@ -37,7 +47,7 @@ const artworkSchema = new mongoose.Schema({
         required: true,
     },
     additionalInfo: {
-        type: String,
+        type: multilingualStringSchema,
     },
 }, {
     timestamps: true,

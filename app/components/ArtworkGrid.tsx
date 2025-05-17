@@ -2,24 +2,19 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-
-interface Artwork {
-    _id: string;
-    title: string;
-    imageUrl: string;
-    videoUrl?: string;
-    category: string;
-    description: string;
-}
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import MultiLangContent from '@/app/components/MultiLangContent';
+import type { Artwork as ArtworkType } from '@/types/artwork';
 
 interface ArtworkGridProps {
     category: string;
 }
 
 export default function ArtworkGrid({ category }: ArtworkGridProps) {
-    const [artworks, setArtworks] = useState<Artwork[]>([]);
+    const [artworks, setArtworks] = useState<ArtworkType[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const { t } = useLanguage();
 
     useEffect(() => {
         async function fetchArtworks() {
@@ -47,7 +42,7 @@ export default function ArtworkGrid({ category }: ArtworkGridProps) {
             <div className="flex justify-center items-center min-h-[300px]">
                 <div className="animate-pulse flex flex-col items-center">
                     <div className="w-12 h-12 border-4 border-accent/60 border-t-accent rounded-full animate-spin mb-4"></div>
-                    <p className="text-foreground/70">Loading artworks...</p>
+                    <p className="text-foreground/70">{t('artwork.loading')}</p>
                 </div>
             </div>
         );
@@ -104,20 +99,22 @@ export default function ArtworkGrid({ category }: ArtworkGridProps) {
                                                 <path d="M8 5v14l11-7z" />
                                             </svg>
                                         </div>
-                                        <span className="absolute bottom-6 text-white font-medium bg-dark/80 px-4 py-2 rounded-full">Watch Video</span>
+                                        <span className="absolute bottom-6 text-white font-medium bg-dark/80 px-4 py-2 rounded-full">{t('artwork.watchVideo')}</span>
                                     </div>
                                 </>
                             )}
                         </div>
                         <div className="p-6">
                             <h3 className="text-xl font-bold mb-2 group-hover:text-accent transition-colors">{artwork.title}</h3>
-                            <p className="text-foreground/70 line-clamp-2">{artwork.description}</p>
+                            <p className="text-foreground/70 line-clamp-2">
+                                <MultiLangContent content={artwork.description} />
+                            </p>
                             <div className="mt-4 flex justify-between items-center">
                                 <span className="text-xs uppercase tracking-wider inline-block bg-foreground/10 text-foreground/70 px-3 py-1 rounded-full">
                                     {category}
                                 </span>
                                 <span className="text-accent font-medium group-hover:translate-x-1 transition-transform inline-flex items-center">
-                                    View details
+                                    {t('artwork.viewDetails')}
                                     <svg className="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                     </svg>

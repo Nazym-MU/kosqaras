@@ -2,12 +2,14 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
+    const { language, setLanguage, t } = useLanguage();
 
     // Handle scrolling effect
     useEffect(() => {
@@ -40,10 +42,10 @@ export default function Header() {
     };
 
     const menuItems = [
-        { label: 'About Me', path: '/about' },
-        { label: 'Illustration', path: '/illustration' },
-        { label: 'Animation', path: '/animation' },
-        { label: 'Storyboard', path: '/storyboard' },
+        { label: t('nav.about'), path: '/about' },
+        { label: t('nav.illustration'), path: '/illustration' },
+        { label: t('nav.animation'), path: '/animation' },
+        { label: t('nav.storyboard'), path: '/storyboard' },
     ];
 
     return (
@@ -64,35 +66,75 @@ export default function Header() {
                                 KOSQARAS
                             </Link>
                         </div>
-                        <button
-                            onClick={toggleMenu}
-                            className="z-50 p-2 rounded-md focus:outline-none transition-colors duration-300"
-                            aria-label="Menu"
-                        >
-                            <div className="w-6 flex flex-col items-end gap-1.5">
-                                <span 
-                                    className={`block h-0.5 transition-all duration-300 ${
-                                        isMenuOpen 
-                                            ? 'w-6 bg-white rotate-45 translate-y-2' 
-                                            : 'w-6 bg-foreground'
-                                    }`} 
-                                ></span>
-                                <span 
-                                    className={`block h-0.5 transition-all duration-300 ${
-                                        isMenuOpen 
-                                            ? 'w-0 opacity-0 bg-white' 
-                                            : 'w-4 bg-foreground'
-                                    }`} 
-                                ></span>
-                                <span 
-                                    className={`block h-0.5 transition-all duration-300 ${
-                                        isMenuOpen 
-                                            ? 'w-6 bg-white -rotate-45 -translate-y-2' 
-                                            : 'w-5 bg-foreground'
-                                    }`} 
-                                ></span>
+                        
+                        <div className="flex items-center space-x-4">
+                            {/* Language switcher */}
+                            <div className="flex items-center space-x-2">
+                                <button 
+                                    onClick={() => setLanguage('kz')}
+                                    className={`px-2 py-1 text-sm rounded-md transition-colors ${
+                                        language === 'kz' 
+                                            ? 'bg-accent text-white' 
+                                            : 'hover:bg-light/30 backdrop-blur'
+                                    }`}
+                                    aria-label="Switch to Kazakh"
+                                >
+                                    KZ
+                                </button>
+                                <button 
+                                    onClick={() => setLanguage('en')}
+                                    className={`px-2 py-1 text-sm rounded-md transition-colors ${
+                                        language === 'en' 
+                                            ? 'bg-accent text-white' 
+                                            : 'hover:bg-light/30 backdrop-blur'
+                                    }`}
+                                    aria-label="Switch to English"
+                                >
+                                    EN
+                                </button>
+                                <button 
+                                    onClick={() => setLanguage('ru')}
+                                    className={`px-2 py-1 text-sm rounded-md transition-colors ${
+                                        language === 'ru' 
+                                            ? 'bg-accent text-white' 
+                                            : 'hover:bg-light/30 backdrop-blur'
+                                    }`}
+                                    aria-label="Switch to Russian"
+                                >
+                                    RU
+                                </button>
                             </div>
-                        </button>
+                            
+                            <button
+                                onClick={toggleMenu}
+                                className="z-50 p-2 rounded-md focus:outline-none transition-colors duration-300"
+                                aria-label="Menu"
+                            >
+                                <div className="w-6 flex flex-col items-end gap-1.5">
+                                    <span 
+                                        className={`block h-0.5 transition-all duration-300 ${
+                                            isMenuOpen 
+                                                ? 'w-6 bg-white rotate-45 translate-y-2' 
+                                                : 'w-6 bg-foreground'
+                                        }`} 
+                                    ></span>
+                                    <span 
+                                        className={`block h-0.5 transition-all duration-300 ${
+                                            isMenuOpen 
+                                                ? 'w-0 opacity-0 bg-white' 
+                                                : 'w-4 bg-foreground'
+                                        }`} 
+                                    ></span>
+                                    <span 
+                                        className={`block h-0.5 transition-all duration-300 ${
+                                            isMenuOpen 
+                                                ? 'w-6 bg-white -rotate-45 -translate-y-2' 
+                                                : 'w-5 bg-foreground'
+                                        }`} 
+                                    ></span>
+                                </div>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </header>

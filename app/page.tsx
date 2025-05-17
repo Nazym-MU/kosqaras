@@ -1,7 +1,11 @@
+"use client";
 import Image from 'next/image';
 import Link from 'next/link';
+import { useLanguage } from './contexts/LanguageContext';
 
 export default function Home() {
+  const { t } = useLanguage();
+  
   return (
     <div className="min-h-screen">
       {/* Hero Section with Improved Image Layout */}
@@ -11,14 +15,14 @@ export default function Home() {
             KOSQARAS
           </h1>
           <p className="text-xl md:text-2xl max-w-2xl text-center text-white/90 leading-relaxed">
-            Bringing stories to life through art and animation
+            {t('home.hero.subtitle')}
           </p>
           <div className="mt-10 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
             <Link href="/gallery" className="bg-accent hover:bg-accent/90 text-white px-8 py-3 rounded-md font-medium transition-colors">
-              View Gallery
+              {t('home.cta.gallery')}
             </Link>
             <Link href="/about" className="bg-white/20 backdrop-blur hover:bg-white/30 text-white px-8 py-3 rounded-md font-medium transition-colors">
-              About Me
+              {t('home.cta.about')}
             </Link>
           </div>
         </div>
@@ -33,7 +37,7 @@ export default function Home() {
 
       {/* Categories Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 className="text-3xl md:text-4xl font-bold mb-10 text-center">Explore My Work</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-10 text-center">{t('home.explore.title')}</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Category Card - Illustration */}
@@ -49,8 +53,8 @@ export default function Home() {
                 />
               </div>
               <div className="p-6">
-                <h3 className="text-2xl font-bold mb-2 group-hover:text-accent transition-colors">Illustration</h3>
-                <p className="text-foreground/70">Explore my illustration work across various styles and techniques.</p>
+                <h3 className="text-2xl font-bold mb-2 group-hover:text-accent transition-colors">{t('home.category.illustration')}</h3>
+                <p className="text-foreground/70">{t('home.category.illustration.desc')}</p>
               </div>
             </div>
           </Link>
@@ -68,8 +72,8 @@ export default function Home() {
                 />
               </div>
               <div className="p-6">
-                <h3 className="text-2xl font-bold mb-2 group-hover:text-accent transition-colors">Animation</h3>
-                <p className="text-foreground/70">Discover animated stories and characters brought to life.</p>
+                <h3 className="text-2xl font-bold mb-2 group-hover:text-accent transition-colors">{t('home.category.animation')}</h3>
+                <p className="text-foreground/70">{t('home.category.animation.desc')}</p>
               </div>
             </div>
           </Link>
@@ -87,8 +91,8 @@ export default function Home() {
                 />
               </div>
               <div className="p-6">
-                <h3 className="text-2xl font-bold mb-2 group-hover:text-accent transition-colors">Storyboard</h3>
-                <p className="text-foreground/70">See how visual narratives are planned and developed.</p>
+                <h3 className="text-2xl font-bold mb-2 group-hover:text-accent transition-colors">{t('home.category.storyboard')}</h3>
+                <p className="text-foreground/70">{t('home.category.storyboard.desc')}</p>
               </div>
             </div>
           </Link>
@@ -100,19 +104,15 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="md:w-1/2">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">About My Work</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">{t('home.about.title')}</h2>
               <p className="text-lg text-foreground/80 leading-relaxed mb-6">
-                I am a passionate artist specializing in illustration, animation, and storyboarding. 
-                My work combines traditional techniques with modern digital tools to create unique 
-                and engaging visual stories.
+                {t('home.about.p1')}
               </p>
               <p className="text-lg text-foreground/80 leading-relaxed mb-8">
-                With a focus on storytelling and emotional expression, each piece is crafted to 
-                convey a narrative that resonates with the viewer. Explore my portfolio to see 
-                my latest works and creative journey.
+                {t('home.about.p2')}
               </p>
               <Link href="/about" className="inline-flex items-center text-accent hover:text-accent/80 font-medium">
-                Learn more about me
+                {t('home.about.learnMore')}
                 <svg className="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>

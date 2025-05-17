@@ -1,15 +1,19 @@
+"use client";
 import Image from 'next/image';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 
 export default function AboutPage() {
+    const { t } = useLanguage();
+    
     return (
         <div className="min-h-screen">
             {/* Hero Banner */}
             <div className="bg-dark/90 relative py-20 mb-12">
                 <div className="absolute inset-0 opacity-20 bg-pattern"></div>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white tracking-tight">About Me</h1>
+                    <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white tracking-tight">{t('about.title')}</h1>
                     <p className="text-lg md:text-xl text-white/80 max-w-2xl">
-                        Artist, animator, and visual storyteller passionate about bringing ideas to life.
+                        {t('about.subtitle')}
                     </p>
                 </div>
             </div>
@@ -28,19 +32,15 @@ export default function AboutPage() {
                     </div>
                     <div className="prose prose-lg max-w-none">
                         <p className="text-lg text-foreground/90 mb-6 leading-relaxed">
-                            Hello! I&apos;m a passionate artist with a focus on illustration, animation, and storyboarding. 
-                            My journey in the creative world has been driven by a deep love for visual storytelling 
-                            and a desire to bring ideas to life through art.
+                            {t('about.intro.p1')}
                         </p>
                         
                         <p className="text-lg text-foreground/90 mb-6 leading-relaxed">
-                            I combine traditional artistic techniques with modern digital tools to create unique 
-                            and engaging visual stories. Each piece I create is a reflection of my commitment 
-                            to quality and attention to detail.
+                            {t('about.intro.p2')}
                         </p>
                         
                         <blockquote className="border-l-4 border-accent pl-4 italic my-8 text-foreground/80">
-                            Art is not what you see, but what you make others see.
+                            {t('about.quote')}
                         </blockquote>
                     </div>
                 </div>
@@ -48,7 +48,7 @@ export default function AboutPage() {
                 {/* Expertise Section */}
                 <div className="bg-light dark:bg-dark/20 rounded-2xl p-8 md:p-12 mb-16">
                     <h2 className="text-3xl font-bold mb-8 relative">
-                        <span className="relative z-10">Areas of Expertise</span>
+                        <span className="relative z-10">{t('about.expertise.title')}</span>
                         <span className="absolute bottom-0 left-0 w-16 h-2 bg-accent rounded-full"></span>
                     </h2>
                     
@@ -59,8 +59,8 @@ export default function AboutPage() {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                 </svg>
                             </div>
-                            <h3 className="text-xl font-semibold mb-2">Digital Illustration</h3>
-                            <p className="text-foreground/70">Creating compelling visual imagery that tells a story or conveys an idea through digital mediums.</p>
+                            <h3 className="text-xl font-semibold mb-2">{t('about.expertise.illustration')}</h3>
+                            <p className="text-foreground/70">{t('about.expertise.illustration.desc')}</p>
                         </div>
                         
                         <div className="bg-background rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
@@ -69,8 +69,8 @@ export default function AboutPage() {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
                                 </svg>
                             </div>
-                            <h3 className="text-xl font-semibold mb-2">2D Animation</h3>
-                            <p className="text-foreground/70">Bringing characters and scenes to life through motion, timing, and expressive movement.</p>
+                            <h3 className="text-xl font-semibold mb-2">{t('about.expertise.animation')}</h3>
+                            <p className="text-foreground/70">{t('about.expertise.animation.desc')}</p>
                         </div>
                         
                         <div className="bg-background rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
@@ -79,8 +79,8 @@ export default function AboutPage() {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                                 </svg>
                             </div>
-                            <h3 className="text-xl font-semibold mb-2">Storyboarding</h3>
-                            <p className="text-foreground/70">Developing visual sequences to pre-visualize animations, films, and interactive media.</p>
+                            <h3 className="text-xl font-semibold mb-2">{t('about.expertise.storyboard')}</h3>
+                            <p className="text-foreground/70">{t('about.expertise.storyboard.desc')}</p>
                         </div>
                         
                         <div className="bg-background rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
@@ -89,8 +89,8 @@ export default function AboutPage() {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                                 </svg>
                             </div>
-                            <h3 className="text-xl font-semibold mb-2">Character Design</h3>
-                            <p className="text-foreground/70">Creating memorable and distinctive characters with personality and visual appeal.</p>
+                            <h3 className="text-xl font-semibold mb-2">{t('about.expertise.character')}</h3>
+                            <p className="text-foreground/70">{t('about.expertise.character.desc')}</p>
                         </div>
                         
                         <div className="bg-background rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
@@ -99,18 +99,17 @@ export default function AboutPage() {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                             </div>
-                            <h3 className="text-xl font-semibold mb-2">Visual Development</h3>
-                            <p className="text-foreground/70">Establishing the visual style, color palettes, and overall aesthetic direction for projects.</p>
+                            <h3 className="text-xl font-semibold mb-2">{t('about.expertise.visual')}</h3>
+                            <p className="text-foreground/70">{t('about.expertise.visual.desc')}</p>
                         </div>
                     </div>
                 </div>
                 
                 {/* Contact Section */}
                 <div className="text-center max-w-3xl mx-auto">
-                    <h2 className="text-3xl font-bold mb-6">Let&apos;s Connect</h2>
+                    <h2 className="text-3xl font-bold mb-6">{t('about.connect.title')}</h2>
                     <p className="text-lg text-foreground/80 mb-8">
-                        I&apos;m always interested in new projects and collaborations. Feel free to reach out 
-                        through any of the social media links below, or send me an email directly.
+                        {t('about.connect.text')}
                     </p>
                     
                     <div className="flex justify-center space-x-6">
@@ -151,3 +150,5 @@ export default function AboutPage() {
         </div>
     );
 } 
+
+

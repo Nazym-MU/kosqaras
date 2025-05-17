@@ -42,8 +42,8 @@ export async function PUT(
         const body = await request.json();
         
         // Validate required fields before updating the artwork
-        const requiredFields = ['title', 'category', 'description', 'date', 'media'];
-        let missingFields = requiredFields.filter(field => !body[field]);
+        const requiredFields = ['title', 'category', 'date', 'media'];
+        const missingFields = requiredFields.filter(field => !body[field]);
         
         // For animations, require videoUrl
         if (body.category === 'animation' && !body.videoUrl) {
@@ -53,6 +53,11 @@ export async function PUT(
         // For non-animations, require imageUrl
         if (body.category !== 'animation' && !body.imageUrl) {
             missingFields.push('imageUrl');
+        }
+        
+        // Check if description exists and has English text
+        if (!body.description || (typeof body.description === 'object' && !body.description.en)) {
+            missingFields.push('description');
         }
         
         if (missingFields.length > 0) {
@@ -67,6 +72,18 @@ export async function PUT(
         
         await connectDB();
 
+        // Format description to ensure it's a multilingual object
+        let description = body.description;
+        if (typeof description === 'string') {
+            description = { en: description, kz: '', ru: '' };
+        }
+        
+        // Format additionalInfo to ensure it's a multilingual object if it exists
+        let additionalInfo = body.additionalInfo || { en: '', kz: '', ru: '' };
+        if (typeof additionalInfo === 'string') {
+            additionalInfo = { en: additionalInfo, kz: '', ru: '' };
+        }
+
         // Await params before accessing
         const resolvedParams = await Promise.resolve(params);
         const artwork = await Artwork.findByIdAndUpdate(
@@ -76,10 +93,10 @@ export async function PUT(
                 imageUrl: body.imageUrl,
                 videoUrl: body.videoUrl || '',
                 category: body.category,
-                description: body.description,
+                description: description,
                 date: body.date,
                 media: body.media,
-                additionalInfo: body.additionalInfo || '',
+                additionalInfo: additionalInfo,
             },
             { new: true, runValidators: true }
         );
@@ -92,13 +109,13 @@ export async function PUT(
         }
 
         return NextResponse.json(JSON.parse(JSON.stringify(artwork)));
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('Error updating artwork:', error);
         
         // Handle validation errors from Mongoose
-        if (error.name === 'ValidationError') {
-            const validationErrors = Object.keys(error.errors).reduce((errors: Record<string, string>, key) => {
-                errors[key] = error.errors[key].message;
+        if (error && typeof error === 'object' && 'name' in error && error.name === 'ValidationError') {
+            const validationErrors = Object.keys((error as any).errors).reduce((errors: Record<string, string>, key) => {
+                errors[key] = (error as any).errors[key].message;
                 return errors;
             }, {});
             

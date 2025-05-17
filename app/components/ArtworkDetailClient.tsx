@@ -3,14 +3,18 @@
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import ArtworkMedia from '@/app/components/ArtworkMedia';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import MultiLangContent from '@/app/components/MultiLangContent';
+import { Artwork } from '@/types/artwork';
 
 interface DetailViewProps {
-  artwork: any;
+  artwork: Artwork;
 }
 
 export default function ArtworkDetailClientWrapper({ artwork }: DetailViewProps) {
   const params = useParams();
   const category = params.category as string;
+  const { t } = useLanguage();
   
   if (!artwork) {
     return (
@@ -18,13 +22,13 @@ export default function ArtworkDetailClientWrapper({ artwork }: DetailViewProps)
         <svg xmlns="http://www.w3.org/2000/svg" className="h-20 w-20 mx-auto text-muted mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h2 className="text-3xl font-bold mb-4">Artwork not found</h2>
-        <p className="text-foreground/70 mb-8 max-w-md mx-auto">The artwork you're looking for does not exist or has been removed.</p>
+        <h2 className="text-3xl font-bold mb-4">{t('artwork.notFound')}</h2>
+        <p className="text-foreground/70 mb-8 max-w-md mx-auto">{t('artwork.notFoundDesc')}</p>
         <Link
           href={`/${category || ''}`}
           className="inline-block px-6 py-3 bg-accent text-white rounded-md hover:bg-accent/90 transition-colors"
         >
-          Go back to gallery
+          {t('artwork.goBack')}
         </Link>
       </div>
     );
@@ -41,7 +45,7 @@ export default function ArtworkDetailClientWrapper({ artwork }: DetailViewProps)
             <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            Back to {category.charAt(0).toUpperCase() + category.slice(1)}
+            {t('artwork.backTo')} {category.charAt(0).toUpperCase() + category.slice(1)}
           </Link>
         </div>
 
@@ -61,28 +65,32 @@ export default function ArtworkDetailClientWrapper({ artwork }: DetailViewProps)
 
             <div className="space-y-8">
               <div className="prose prose-lg max-w-none">
-                <p className="text-lg leading-relaxed text-foreground/90">{artwork.description}</p>
+                <p className="text-lg leading-relaxed text-foreground/90">
+                  <MultiLangContent content={artwork.description} />
+                </p>
               </div>
 
               <div className="bg-background p-6 rounded-lg grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <div className="space-y-2">
-                  <h3 className="text-sm uppercase tracking-wider text-foreground/60">Date</h3>
+                  <h3 className="text-sm uppercase tracking-wider text-foreground/60">{t('artwork.date')}</h3>
                   <p className="font-medium">{artwork.date}</p>
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-sm uppercase tracking-wider text-foreground/60">Media</h3>
+                  <h3 className="text-sm uppercase tracking-wider text-foreground/60">{t('artwork.media')}</h3>
                   <p className="font-medium">{artwork.media}</p>
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-sm uppercase tracking-wider text-foreground/60">Category</h3>
+                  <h3 className="text-sm uppercase tracking-wider text-foreground/60">{t('artwork.category')}</h3>
                   <p className="font-medium">{category.charAt(0).toUpperCase() + category.slice(1)}</p>
                 </div>
               </div>
 
               {artwork.additionalInfo && (
                 <div className="bg-background p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-3">Additional Information</h3>
-                  <p className="text-foreground/80">{artwork.additionalInfo}</p>
+                  <h3 className="text-lg font-semibold mb-3">{t('artwork.additionalInfo')}</h3>
+                  <p className="text-foreground/80">
+                    <MultiLangContent content={artwork.additionalInfo} />
+                  </p>
                 </div>
               )}
               
@@ -94,7 +102,7 @@ export default function ArtworkDetailClientWrapper({ artwork }: DetailViewProps)
                   <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                   </svg>
-                  View all {category}
+                  {t('artwork.viewAll')} {category}
                 </Link>
                 <div className="flex space-x-3">
                   <button className="p-2 text-foreground/60 hover:text-accent rounded-full transition-colors">
