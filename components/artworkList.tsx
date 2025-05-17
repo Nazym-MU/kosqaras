@@ -174,7 +174,7 @@ export default function ArtworkList({ onEdit }: ArtworkListProps) {
               <div className="p-4">
                 <div className="flex justify-between items-start">
                   <div>
-                    <h3 className="text-lg font-semibold mb-1">{artwork.title}</h3>
+                    <h3 className="text-lg font-semibold mb-1 text-gray-800">{artwork.title}</h3>
                     <span className="inline-block bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded mb-2">
                       {artwork.category.charAt(0).toUpperCase() + artwork.category.slice(1)}
                     </span>

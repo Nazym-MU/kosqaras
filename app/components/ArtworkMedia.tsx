@@ -3,8 +3,8 @@
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 
-// Dynamically import the YouTubeEmbed component only on the client-side
-const YouTubeEmbed = dynamic(() => import('@/app/components/YouTubeEmbed'), { ssr: false });
+// Dynamically import the GoogleDriveEmbed component only on the client-side
+const GoogleDriveEmbed = dynamic(() => import('@/app/components/GoogleDriveEmbed'), { ssr: false });
 
 interface ArtworkMediaProps {
   artwork: {
@@ -23,7 +23,7 @@ export default function ArtworkMedia({ artwork, category }: ArtworkMediaProps) {
     <>
       {hasVideo ? (
         <div className="w-full aspect-video rounded-lg overflow-hidden bg-black/5">
-          <YouTubeEmbed videoUrl={artwork.videoUrl!} title={artwork.title} />
+          <GoogleDriveEmbed videoUrl={artwork.videoUrl!} title={artwork.title} />
         </div>
       ) : (
         <div className="relative w-full aspect-[4/3] lg:aspect-[16/9] bg-black/5 rounded-lg overflow-hidden">

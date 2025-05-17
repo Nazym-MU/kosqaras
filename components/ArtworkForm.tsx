@@ -87,15 +87,15 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
         if (!formData.date) newErrors.date = 'Date is required';
         if (!formData.media.trim()) newErrors.media = 'Media information is required';
         
-        // For animations, we need a YouTube URL
+        // For animations, we need a Google Drive URL
         if (formData.category === 'animation') {
             if (!formData.videoUrl?.trim()) {
-                newErrors.videoUrl = 'YouTube URL is required for animations';
+                newErrors.videoUrl = 'Google Drive URL is required for animations';
             } else {
-                // Validate YouTube URL format
-                const isValidYouTubeUrl = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/.test(formData.videoUrl);
-                if (!isValidYouTubeUrl) {
-                    newErrors.videoUrl = 'Please enter a valid YouTube URL';
+                // Validate Google Drive URL format
+                const isValidGoogleDriveUrl = /^(https?:\/\/)?(drive\.google\.com\/)(file\/d\/|open\?id=|uc\?id=)([a-zA-Z0-9_-]+)/.test(formData.videoUrl);
+                if (!isValidGoogleDriveUrl) {
+                    newErrors.videoUrl = 'Please enter a valid Google Drive URL';
                 }
             }
         }
@@ -146,19 +146,13 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
                     
                     onSubmit(updatedArtwork);
                 } else {
-                    // No new thumbnail, use existing or generate from YouTube
+                    // No new thumbnail, use existing or use placeholder for Google Drive videos
                     if (!formData.imageUrl) {
-                        // Extract YouTube video ID and use thumbnail
-                        const videoId = formData.videoUrl?.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^?&/]+)/)?.[1];
-                        if (videoId) {
-                            formData.imageUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
-                        } else {
-                            // Use a placeholder if we can't extract the ID
-                            formData.imageUrl = '/placeholder-video.svg';
-                        }
+                        // For Google Drive videos, always use the placeholder image
+                        formData.imageUrl = '/placeholder-video.svg';
                     }
                     
-                    // Submit with existing or generated thumbnail
+                    // Submit with existing or placeholder thumbnail
                     onSubmit(formData);
                 }
             } else {
@@ -205,7 +199,6 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
                                     : 'Failed to submit artwork'));
                         }
                         
-                        // Success! Call the onSubmit handler with the updated artwork
                         const data = await submitResponse.json();
                         onSubmit(data);
                     } catch (submitError) {
@@ -227,7 +220,7 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6 bg-white shadow-md rounded-lg p-6">
-            <h2 className="text-2xl font-bold mb-6">{isEditing ? 'Edit Artwork' : 'Add New Artwork'}</h2>
+            <h2 className="text-2xl font-bold mb-6 text-gray-600">{isEditing ? 'Edit Artwork' : 'Add New Artwork'}</h2>
             
             {errors.submit && (
                 <div className="bg-red-50 text-red-500 p-4 rounded mb-6">
@@ -247,7 +240,7 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
                             name="title"
                             value={formData.title}
                             onChange={handleChange}
-                            className={`w-full px-3 py-2 border rounded-md ${errors.title ? 'border-red-500' : 'border-gray-300'}`}
+                            className={`w-full px-3 py-2 border rounded-md text-gray-900 ${errors.title ? 'border-red-500' : 'border-gray-300'}`}
                         />
                         {errors.title && <p className="mt-1 text-sm text-red-500">{errors.title}</p>}
                     </div>
@@ -261,7 +254,7 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
                             name="category"
                             value={formData.category}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900"
                         >
                             <option value="illustration">Illustration</option>
                             <option value="animation">Animation</option>
@@ -279,7 +272,7 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
                             name="date"
                             value={formData.date}
                             onChange={handleChange}
-                            className={`w-full px-3 py-2 border rounded-md ${errors.date ? 'border-red-500' : 'border-gray-300'}`}
+                            className={`w-full px-3 py-2 border rounded-md text-gray-900 ${errors.date ? 'border-red-500' : 'border-gray-300'}`}
                         />
                         {errors.date && <p className="mt-1 text-sm text-red-500">{errors.date}</p>}
                     </div>
@@ -295,7 +288,7 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
                             value={formData.media}
                             onChange={handleChange}
                             placeholder="e.g., Digital Art, Procreate"
-                            className={`w-full px-3 py-2 border rounded-md ${errors.media ? 'border-red-500' : 'border-gray-300'}`}
+                            className={`w-full px-3 py-2 border rounded-md text-gray-900 ${errors.media ? 'border-red-500' : 'border-gray-300'}`}
                         />
                         {errors.media && <p className="mt-1 text-sm text-red-500">{errors.media}</p>}
                     </div>
@@ -303,7 +296,7 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
                     {formData.category === 'animation' && (
                         <div>
                             <label htmlFor="videoUrl" className="block text-sm font-medium text-gray-700 mb-1">
-                                YouTube Video URL *
+                                Google Drive Video URL *
                             </label>
                             <input
                                 type="text"
@@ -311,12 +304,12 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
                                 name="videoUrl"
                                 value={formData.videoUrl || ''}
                                 onChange={handleChange}
-                                placeholder="e.g., https://www.youtube.com/watch?v=abcdefg"
-                                className={`w-full px-3 py-2 border rounded-md ${errors.videoUrl ? 'border-red-500' : 'border-gray-300'}`}
+                                placeholder="e.g., https://drive.google.com/file/d/FILEID/view"
+                                className={`w-full px-3 py-2 border rounded-md text-gray-900 ${errors.videoUrl ? 'border-red-500' : 'border-gray-300'}`}
                             />
                             {errors.videoUrl && <p className="mt-1 text-sm text-red-500">{errors.videoUrl}</p>}
                             <p className="mt-1 text-xs text-gray-500">
-                                Required for animations: Add a YouTube URL for your animation
+                                Required for animations: Add a Google Drive URL for your animation
                             </p>
                         </div>
                     )}
@@ -333,7 +326,7 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
                             value={formData.description}
                             onChange={handleChange}
                             rows={3}
-                            className={`w-full px-3 py-2 border rounded-md ${errors.description ? 'border-red-500' : 'border-gray-300'}`}
+                            className={`w-full px-3 py-2 border rounded-md text-gray-900 ${errors.description ? 'border-red-500' : 'border-gray-300'}`}
                         />
                         {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description}</p>}
                     </div>
@@ -348,7 +341,7 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
                             value={formData.additionalInfo || ''}
                             onChange={handleChange}
                             rows={3}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900"
                         />
                     </div>
                     
@@ -362,7 +355,7 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
                             name="image"
                             accept="image/*,video/*"
                             onChange={handleFileChange}
-                            className={`w-full px-3 py-2 border rounded-md ${errors.imageUrl ? 'border-red-500' : 'border-gray-300'}`}
+                            className={`w-full px-3 py-2 border rounded-md text-gray-900 ${errors.imageUrl ? 'border-red-500' : 'border-gray-300'}`}
                         />
                         {errors.imageUrl && <p className="mt-1 text-sm text-red-500">{errors.imageUrl}</p>}
                     </div>
