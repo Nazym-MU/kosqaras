@@ -37,8 +37,9 @@ async function getArtworkById(artworkId: string) {
 
 // Server Component that handles data fetching
 export default async function ArtworkPage({ params }: PageProps) {
-  // Access the params safely after waiting for them to resolve
-  const id = typeof params.id === 'string' ? params.id : '';
+  // Access the params as an awaited Promise if necessary in future Next.js versions
+  const resolvedParams = await Promise.resolve(params);
+  const id = typeof resolvedParams.id === 'string' ? resolvedParams.id : '';
   
   // Fetch artwork data
   const artwork = await getArtworkById(id);

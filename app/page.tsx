@@ -42,7 +42,7 @@ export default function Home() {
               <div className="h-60 relative">
                 <div className="absolute inset-0 bg-dark/20 group-hover:bg-dark/10 transition-colors z-10"></div>
                 <Image
-                  src="/placeholders/illustration-placeholder.png" 
+                  src="/placeholders/illustration-placeholder.jpg" 
                   alt="Illustration work"
                   fill
                   className="object-cover transition-transform group-hover:scale-105"
@@ -61,7 +61,7 @@ export default function Home() {
               <div className="h-60 relative">
                 <div className="absolute inset-0 bg-dark/20 group-hover:bg-dark/10 transition-colors z-10"></div>
                 <Image
-                  src="/placeholders/animation-placeholder.png" 
+                  src="/placeholders/animation-placeholder.jpg" 
                   alt="Animation work"
                   fill
                   className="object-cover transition-transform group-hover:scale-105"
@@ -80,7 +80,7 @@ export default function Home() {
               <div className="h-60 relative">
                 <div className="absolute inset-0 bg-dark/20 group-hover:bg-dark/10 transition-colors z-10"></div>
                 <Image
-                  src="/placeholders/storyboard-placeholder.TIF" 
+                  src="/placeholders/storyboard-placeholder.jpg" 
                   alt="Storyboard work"
                   fill
                   className="object-cover transition-transform group-hover:scale-105"

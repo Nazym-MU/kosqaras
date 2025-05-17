@@ -12,8 +12,10 @@ export async function GET(
 ) {
     try {
         await connectDB();
-
-        const artwork = await Artwork.findById(params.id);
+        
+        // Await params before accessing
+        const resolvedParams = await Promise.resolve(params);
+        const artwork = await Artwork.findById(resolvedParams.id);
         
         if (!artwork) {
             return NextResponse.json(
@@ -65,8 +67,10 @@ export async function PUT(
         
         await connectDB();
 
+        // Await params before accessing
+        const resolvedParams = await Promise.resolve(params);
         const artwork = await Artwork.findByIdAndUpdate(
-            params.id,
+            resolvedParams.id,
             {
                 title: body.title,
                 imageUrl: body.imageUrl,
@@ -118,7 +122,9 @@ export async function DELETE(
   try {
     await connectDB();
 
-    const artwork = await Artwork.findByIdAndDelete(params.id);
+    // Await params before accessing
+    const resolvedParams = await Promise.resolve(params);
+    const artwork = await Artwork.findByIdAndDelete(resolvedParams.id);
     
     if (!artwork) {
       return NextResponse.json(
