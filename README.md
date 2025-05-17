@@ -34,3 +34,26 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## YouTube Integration for Animations
+
+This project includes YouTube video integration specifically for the Animation category. Here's how it works:
+
+### For Artists/Admins:
+1. When creating or editing animations, provide a YouTube video URL in the designated field
+2. The URL can be in different formats (youtube.com/watch?v=ID, youtu.be/ID, youtube.com/shorts/ID)
+3. A thumbnail image can be uploaded manually, or the system will use YouTube's thumbnail
+4. The form validates YouTube URLs to ensure they have the correct format
+
+### For Visitors:
+1. Animations with videos show a play button overlay in the grid view
+2. Clicking on an animation opens the detail view with an embedded YouTube player
+3. The video maintains responsive sizing across different devices
+
+### Implementation Details:
+- The `YouTubeEmbed` component extracts video IDs from various YouTube URL formats
+- Videos are embedded using YouTube's iframe API with security settings
+- Animations require a video URL, while illustrations and storyboards require image uploads
+- The system uses YouTube thumbnails or placeholder images for animations that lack manual thumbnails
+
+To test the YouTube integration, visit the Animations page and use the "Add Sample Animation" button.

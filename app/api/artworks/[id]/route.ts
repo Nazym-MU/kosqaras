@@ -1,6 +1,10 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Artwork from '@/app/models/Artwork';
+
+interface Params {
+  id: string;
+}
 
 export async function GET(
     request: Request,
@@ -18,7 +22,7 @@ export async function GET(
             );
         }
 
-        return NextResponse.json(artwork);
+        return NextResponse.json(JSON.parse(JSON.stringify(artwork)));
     } catch (error) {
         console.error('Error fetching artwork:', error);
         return NextResponse.json(
@@ -36,8 +40,18 @@ export async function PUT(
         const body = await request.json();
         
         // Validate required fields before updating the artwork
-        const requiredFields = ['title', 'imageUrl', 'category', 'description', 'date', 'media'];
-        const missingFields = requiredFields.filter(field => !body[field]);
+        const requiredFields = ['title', 'category', 'description', 'date', 'media'];
+        let missingFields = requiredFields.filter(field => !body[field]);
+        
+        // For animations, require videoUrl
+        if (body.category === 'animation' && !body.videoUrl) {
+            missingFields.push('videoUrl');
+        }
+        
+        // For non-animations, require imageUrl
+        if (body.category !== 'animation' && !body.imageUrl) {
+            missingFields.push('imageUrl');
+        }
         
         if (missingFields.length > 0) {
             return NextResponse.json(
@@ -56,6 +70,7 @@ export async function PUT(
             {
                 title: body.title,
                 imageUrl: body.imageUrl,
+                videoUrl: body.videoUrl || '',
                 category: body.category,
                 description: body.description,
                 date: body.date,
@@ -72,7 +87,7 @@ export async function PUT(
             );
         }
 
-        return NextResponse.json(artwork);
+        return NextResponse.json(JSON.parse(JSON.stringify(artwork)));
     } catch (error: any) {
         console.error('Error updating artwork:', error);
         
@@ -97,27 +112,30 @@ export async function PUT(
 }
 
 export async function DELETE(
-    request: Request,
-    { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Params }
 ) {
-    try {
-        await connectDB();
+  try {
+    await connectDB();
 
-        const artwork = await Artwork.findByIdAndDelete(params.id);
-        
-        if (!artwork) {
-            return NextResponse.json(
-                { error: 'Artwork not found' },
-                { status: 404 }
-            );
-        }
-
-        return NextResponse.json({ message: 'Artwork deleted successfully' });
-    } catch (error) {
-        console.error('Error deleting artwork:', error);
-        return NextResponse.json(
-            { error: 'Failed to delete artwork' },
-            { status: 500 }
-        );
+    const artwork = await Artwork.findByIdAndDelete(params.id);
+    
+    if (!artwork) {
+      return NextResponse.json(
+        { success: false, message: 'Artwork not found' },
+        { status: 404 }
+      );
     }
-} 
+
+    return NextResponse.json(
+      { success: true, message: 'Artwork deleted successfully' },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('Error deleting artwork:', error);
+    return NextResponse.json(
+      { success: false, message: 'Failed to delete artwork' },
+      { status: 500 }
+    );
+  }
+}

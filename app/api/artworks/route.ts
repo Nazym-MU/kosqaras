@@ -12,7 +12,8 @@ export async function GET(request: Request) {
         const query = category && category !== 'all' ? { category } : {};
         const artworks = await Artwork.find(query).sort({ createdAt: -1 });
 
-        return NextResponse.json(artworks);
+        // Ensure we're returning a serialized version (plain object)
+        return NextResponse.json(JSON.parse(JSON.stringify(artworks)));
     } catch (error) {
         console.error('Error fetching artworks:', error);
         return NextResponse.json(
@@ -27,8 +28,18 @@ export async function POST(request: Request) {
         const body = await request.json();
         
         // Validate required fields before creating the artwork
-        const requiredFields = ['title', 'imageUrl', 'category', 'description', 'date', 'media'];
-        const missingFields = requiredFields.filter(field => !body[field]);
+        const requiredFields = ['title', 'category', 'description', 'date', 'media'];
+        let missingFields = requiredFields.filter(field => !body[field]);
+        
+        // For animations, require videoUrl
+        if (body.category === 'animation' && !body.videoUrl) {
+            missingFields.push('videoUrl');
+        }
+        
+        // For non-animations, require imageUrl
+        if (body.category !== 'animation' && !body.imageUrl) {
+            missingFields.push('imageUrl');
+        }
         
         if (missingFields.length > 0) {
             return NextResponse.json(
@@ -45,6 +56,7 @@ export async function POST(request: Request) {
         const artwork = await Artwork.create({
             title: body.title,
             imageUrl: body.imageUrl,
+            videoUrl: body.videoUrl || '',
             category: body.category,
             description: body.description,
             date: body.date,
@@ -52,7 +64,7 @@ export async function POST(request: Request) {
             additionalInfo: body.additionalInfo || '',
         });
 
-        return NextResponse.json(artwork, { status: 201 });
+        return NextResponse.json(JSON.parse(JSON.stringify(artwork)), { status: 201 });
     } catch (error: any) {
         console.error('Error creating artwork:', error);
         

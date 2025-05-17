@@ -10,6 +10,7 @@ interface Artwork {
     date: string;
     media: string;
     imageUrl: string;
+    videoUrl?: string;
     additionalInfo?: string;
 }
 
@@ -26,6 +27,7 @@ const defaultArtwork: Artwork = {
     date: '',
     media: '',
     imageUrl: '',
+    videoUrl: '',
     additionalInfo: '',
 };
 
@@ -84,7 +86,25 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
         if (!formData.description.trim()) newErrors.description = 'Description is required';
         if (!formData.date) newErrors.date = 'Date is required';
         if (!formData.media.trim()) newErrors.media = 'Media information is required';
-        if (!formData.imageUrl && !file) newErrors.imageUrl = 'Image is required';
+        
+        // For animations, we need a YouTube URL
+        if (formData.category === 'animation') {
+            if (!formData.videoUrl?.trim()) {
+                newErrors.videoUrl = 'YouTube URL is required for animations';
+            } else {
+                // Validate YouTube URL format
+                const isValidYouTubeUrl = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/.test(formData.videoUrl);
+                if (!isValidYouTubeUrl) {
+                    newErrors.videoUrl = 'Please enter a valid YouTube URL';
+                }
+            }
+        }
+        
+        // Always require an image for illustrations and storyboards
+        // For animations, only require if no video URL is provided
+        if (formData.category !== 'animation' && !formData.imageUrl && !file) {
+            newErrors.imageUrl = 'Image is required';
+        }
         
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -98,45 +118,77 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
         try {
             setIsUploading(true);
             
-            // Log form data to see what's being submitted
-            console.log('Form data before submission:', formData);
-            
-            // Only upload a new file if one is selected
-            if (file) {
-                const fileFormData = new FormData();
-                fileFormData.append('file', file);
-                
-                const uploadResponse = await fetch('/api/upload', {
-                    method: 'POST',
-                    body: fileFormData,
-                });
-                
-                if (!uploadResponse.ok) {
-                    throw new Error('Failed to upload file');
+            // Different handling based on category
+            if (formData.category === 'animation') {
+                // For animations, we need a YouTube video URL
+                if (file) {
+                    // If we have a new thumbnail, upload it
+                    const fileFormData = new FormData();
+                    fileFormData.append('file', file);
+                    
+                    const uploadResponse = await fetch('/api/upload', {
+                        method: 'POST',
+                        body: fileFormData,
+                    });
+                    
+                    if (!uploadResponse.ok) {
+                        throw new Error('Failed to upload thumbnail');
+                    }
+                    
+                    const uploadData = await uploadResponse.json();
+                    
+                    // Update with new thumbnail
+                    const updatedArtwork = {
+                        ...formData,
+                        imageUrl: uploadData.imageUrl
+                    };
+                    
+                    onSubmit(updatedArtwork);
+                } else {
+                    // No new thumbnail, use existing or generate from YouTube
+                    if (!formData.imageUrl) {
+                        // Extract YouTube video ID and use thumbnail
+                        const videoId = formData.videoUrl?.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^?&/]+)/)?.[1];
+                        if (videoId) {
+                            formData.imageUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+                        } else {
+                            // Use a placeholder if we can't extract the ID
+                            formData.imageUrl = '/placeholder-video.svg';
+                        }
+                    }
+                    
+                    // Submit with existing or generated thumbnail
+                    onSubmit(formData);
                 }
-                
-                const uploadData = await uploadResponse.json();
-                
-                // Submit with the new image URL - create a new object to include all form data plus the new image URL
-                const updatedArtwork = {
-                    ...formData,
-                    imageUrl: uploadData.imageUrl
-                };
-                
-                // Log updated artwork data
-                console.log('Updated artwork with image URL:', updatedArtwork);
-                
-                // Update the form data state (though this won't be used for the current submission)
-                setFormData(prev => ({ ...prev, imageUrl: uploadData.imageUrl }));
-                
-                // Submit the updated artwork data
-                onSubmit(updatedArtwork);
             } else {
-                // Log form data for submission without file
-                console.log('Submitting form data without file:', formData);
-                
-                // Submit with existing data
-                onSubmit(formData);
+                // For illustration and storyboard, we need an image
+                if (file) {
+                    // Upload the new image
+                    const fileFormData = new FormData();
+                    fileFormData.append('file', file);
+                    
+                    const uploadResponse = await fetch('/api/upload', {
+                        method: 'POST',
+                        body: fileFormData,
+                    });
+                    
+                    if (!uploadResponse.ok) {
+                        throw new Error('Failed to upload image');
+                    }
+                    
+                    const uploadData = await uploadResponse.json();
+                    
+                    // Update with new image URL
+                    const updatedArtwork = {
+                        ...formData,
+                        imageUrl: uploadData.imageUrl
+                    };
+                    
+                    onSubmit(updatedArtwork);
+                } else {
+                    // No new image, use existing one
+                    onSubmit(formData);
+                }
             }
         } catch (error) {
             console.error('Error uploading file or submitting form:', error);
@@ -220,6 +272,27 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
                         />
                         {errors.media && <p className="mt-1 text-sm text-red-500">{errors.media}</p>}
                     </div>
+
+                    {formData.category === 'animation' && (
+                        <div>
+                            <label htmlFor="videoUrl" className="block text-sm font-medium text-gray-700 mb-1">
+                                YouTube Video URL *
+                            </label>
+                            <input
+                                type="text"
+                                id="videoUrl"
+                                name="videoUrl"
+                                value={formData.videoUrl || ''}
+                                onChange={handleChange}
+                                placeholder="e.g., https://www.youtube.com/watch?v=abcdefg"
+                                className={`w-full px-3 py-2 border rounded-md ${errors.videoUrl ? 'border-red-500' : 'border-gray-300'}`}
+                            />
+                            {errors.videoUrl && <p className="mt-1 text-sm text-red-500">{errors.videoUrl}</p>}
+                            <p className="mt-1 text-xs text-gray-500">
+                                Required for animations: Add a YouTube URL for your animation
+                            </p>
+                        </div>
+                    )}
                 </div>
                 
                 <div className="space-y-4">
@@ -300,5 +373,6 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
                 </button>
             </div>
         </form>
-    );
-} 
+        );
+    
+    }

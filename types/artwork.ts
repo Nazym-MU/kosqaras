@@ -5,6 +5,7 @@ export interface Artwork {
     description: string;
     category: 'animation' | 'illustration' | 'storyboard' | '3D model';
     imageUrl: string;
+    videoUrl?: string; // For YouTube videos (optional)
     date: string;
     media: string;
     additionalInfo?: string;
