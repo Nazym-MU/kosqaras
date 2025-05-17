@@ -5,7 +5,10 @@ import Artwork from '@/app/models/Artwork';
 import ArtworkDetailClient from '@/app/components/ArtworkDetailClient';
 
 interface PageProps {
-  params: any;
+  params: {
+    category: string;
+    id: string;
+  };
 }
 
 // Function to get artwork by id without directly accessing params in the component
@@ -34,12 +37,11 @@ async function getArtworkById(artworkId: string) {
 
 // Server Component that handles data fetching
 export default async function ArtworkPage({ params }: PageProps) {
-  // Get the artwork ID from pathname instead of directly from params
-  const pathname = `/${params.category}/${params.id}`;
-  const artworkId = pathname.split('/').pop() || '';
+  // Access the params safely after waiting for them to resolve
+  const id = typeof params.id === 'string' ? params.id : '';
   
   // Fetch artwork data
-  const artwork = await getArtworkById(artworkId);
+  const artwork = await getArtworkById(id);
   
   if (!artwork) {
     return notFound();

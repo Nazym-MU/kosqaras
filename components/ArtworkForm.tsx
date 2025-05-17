@@ -132,7 +132,8 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
                     });
                     
                     if (!uploadResponse.ok) {
-                        throw new Error('Failed to upload thumbnail');
+                        const errorData = await uploadResponse.json();
+                        throw new Error(errorData.error || 'Failed to upload thumbnail');
                     }
                     
                     const uploadData = await uploadResponse.json();
@@ -186,13 +187,39 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
                     
                     onSubmit(updatedArtwork);
                 } else {
-                    // No new image, use existing one
-                    onSubmit(formData);
+                    try {
+                        // Submit with API call
+                        const submitResponse = await fetch(isEditing ? `/api/artworks/${artwork._id}` : '/api/artworks', {
+                            method: isEditing ? 'PUT' : 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(formData),
+                        });
+                        
+                        if (!submitResponse.ok) {
+                            const errorData = await submitResponse.json();
+                            throw new Error(errorData.error || 
+                                (errorData.missingFields 
+                                    ? `Missing fields: ${errorData.missingFields.join(', ')}` 
+                                    : 'Failed to submit artwork'));
+                        }
+                        
+                        // Success! Call the onSubmit handler with the updated artwork
+                        const data = await submitResponse.json();
+                        onSubmit(data);
+                    } catch (submitError) {
+                        console.error('Error submitting artwork:', submitError);
+                        setErrors(prev => ({ 
+                            ...prev, 
+                            submit: submitError instanceof Error 
+                                ? submitError.message 
+                                : 'Failed to submit artwork. Please try again.' 
+                        }));
+                        setIsUploading(false);
+                    }
                 }
             }
-        } catch (error) {
-            console.error('Error uploading file or submitting form:', error);
-            setErrors(prev => ({ ...prev, submit: 'Failed to submit form. Please try again.' }));
         } finally {
             setIsUploading(false);
         }

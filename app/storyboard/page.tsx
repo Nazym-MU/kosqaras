@@ -2,9 +2,30 @@ import ArtworkGrid from '../components/ArtworkGrid';
 
 export default function StoryboardPage() {
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="text-4xl font-bold mb-8 text-center">Storyboards</h1>
-            <ArtworkGrid category="storyboard" />
+        <div className="min-h-screen">
+            {/* Hero Banner */}
+            <div className="bg-dark/90 relative py-20 mb-12">
+                <div className="absolute inset-0 opacity-20 bg-pattern"></div>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white tracking-tight">Storyboards</h1>
+                    <p className="text-lg md:text-xl text-white/80 max-w-2xl">
+                        Explore the visual narratives that guide my storytelling process and bring scenes to life before animation.
+                    </p>
+                </div>
+            </div>
+            
+            {/* Gallery Section */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+                <div className="flex justify-between items-center mb-10">
+                    <h2 className="text-2xl font-bold">Gallery</h2>
+                    <div className="flex items-center gap-2 text-sm text-foreground/70">
+                        <span>View:</span>
+                        <button className="p-2 bg-accent/10 text-accent rounded">Grid</button>
+                        <button className="p-2 hover:bg-accent/10 hover:text-accent rounded transition-colors">List</button>
+                    </div>
+                </div>
+                <ArtworkGrid category="storyboard" />
+            </div>
         </div>
     );
 } 

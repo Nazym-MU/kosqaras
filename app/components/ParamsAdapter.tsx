@@ -13,7 +13,7 @@ export default function ParamsAdapter({ children }: { children: (params: Record<
   const paramsRecord: Record<string, string> = {};
   for (const [key, value] of Object.entries(params)) {
     // Handle both string and string[] cases
-    paramsRecord[key] = Array.isArray(value) ? (value[0] ?? "") : (value ?? "");
+    paramsRecord[key] = Array.isArray(value) ? value[0] ?? "" : value ?? "";
   }
   
   return <>{children(paramsRecord)}</>;

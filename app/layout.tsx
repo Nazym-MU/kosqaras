@@ -5,11 +5,18 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Providers } from "./providers";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ 
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter"
+});
 
 export const metadata: Metadata = {
   title: "KOSQARAS",
-  description: "Portfolio website",
+  description: "Portfolio website of a passionate artist specializing in illustration, animation, and storyboarding",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -18,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.variable}>
       <body className={inter.className}>
         <Providers>
           <Header />

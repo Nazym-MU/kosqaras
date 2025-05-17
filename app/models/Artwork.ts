@@ -7,11 +7,17 @@ const artworkSchema = new mongoose.Schema({
     },
     imageUrl: {
         type: String,
-        required: true,
+        required: function(this: any) {
+            // imageUrl is only required for non-animations or if no videoUrl is provided
+            return this.category !== 'animation' || !this.videoUrl;
+        },
     },
     videoUrl: {
         type: String,
-        required: false,
+        required: function(this: any) {
+            // videoUrl is required for animations
+            return this.category === 'animation';
+        },
     },
     category: {
         type: String,

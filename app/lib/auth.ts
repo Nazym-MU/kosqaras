@@ -1,12 +1,33 @@
-import { type NextAuthConfig } from "next-auth";
+import { DefaultSession, NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth from "next-auth";
+import { JWT } from "next-auth/jwt";
+
+// Extend the built-in session types
+declare module "next-auth" {
+  interface Session extends DefaultSession {
+    user?: {
+      id: string;
+      role?: string;
+    } & DefaultSession["user"];
+  }
+
+  interface User {
+    role?: string;
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    role?: string;
+  }
+}
 
 const adminEmail = process.env.ADMIN_EMAIL || "admin@example.com";
 const adminPassword = process.env.ADMIN_PASSWORD || "password123";
 
 // Configure NextAuth options
-export const authConfig = {
+export const authConfig: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -54,6 +75,6 @@ export const authConfig = {
     maxAge: 24 * 60 * 60, // 24 hours
   },
   secret: process.env.NEXTAUTH_SECRET || "your-secret-key",
-} satisfies NextAuthConfig;
+};
 
-export const { auth, signIn, signOut } = NextAuth(authConfig); 
+export const { auth, signIn, signOut } = NextAuth(authConfig);
