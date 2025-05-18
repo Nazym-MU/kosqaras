@@ -31,7 +31,7 @@ export default function Footer() {
                                 <svg className="h-5 w-5 mr-2 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                 </svg>
-                                <a href="mailto:ayakoshkz@gmail.com" className="hover:text-accent transition-colors">ayakoshkz@gmail.com</a>
+                                <a href="mailto:ayanatkz@icloud.com" className="hover:text-accent transition-colors">ayanatkz@icloud.com</a>
                             </p>
                             <p className="flex items-center text-foreground/70">
                                 <svg className="h-5 w-5 mr-2 text-accent" fill="currentColor" viewBox="0 0 24 24">
@@ -65,7 +65,7 @@ export default function Footer() {
                                 </svg>
                             </a>
                             <a 
-                                href="mailto:ayakoshkz@gmail.com" 
+                                href="mailto:ayanatkz@icloud.com" 
                                 className="bg-foreground/10 hover:bg-accent text-foreground hover:text-white p-2 rounded-full transition-colors"
                                 aria-label="Email"
                             >

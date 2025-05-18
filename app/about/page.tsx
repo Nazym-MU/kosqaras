@@ -136,7 +136,7 @@ export default function AboutPage() {
                             </svg>
                         </a>
                         <a 
-                            href="mailto:ayakoshkz@gmail.com" 
+                            href="mailto:ayanatkz@icloud.com" 
                             className="bg-foreground/10 hover:bg-accent text-foreground hover:text-white p-3 rounded-full transition-colors"
                             aria-label="Email"
                         >

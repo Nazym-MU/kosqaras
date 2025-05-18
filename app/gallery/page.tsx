@@ -11,7 +11,6 @@ export default function Gallery() {
     const [artworks, setArtworks] = useState<Artwork[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
     const { t } = useLanguage();
 
     const categories: Array<"animation" | "illustration" | "storyboard"> = [
@@ -128,107 +127,42 @@ export default function Gallery() {
                             </button>
                         ))}
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-foreground/70">
-                        <span>{t('gallery.view')}:</span>
-                        <button 
-                            className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-accent/10 text-accent' : 'hover:bg-accent/10 hover:text-accent'}`}
-                            onClick={() => setViewMode('grid')}
-                        >
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                            </svg>
-                        </button>
-                        <button 
-                            className={`p-2 rounded transition-colors ${viewMode === 'list' ? 'bg-accent/10 text-accent' : 'hover:bg-accent/10 hover:text-accent'}`}
-                            onClick={() => setViewMode('list')}
-                        >
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
-                        </button>
-                    </div>
                 </div>
                 {filteredArtworks.length > 0 ? (
-                    viewMode === 'grid' ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {filteredArtworks.map((artwork) => (
-                                <Link 
-                                    href={`/${artwork.category}/${artwork._id || artwork.id}`} 
-                                    key={artwork._id || artwork.id}
-                                    className="block group"
-                                >
-                                    <div className="bg-light dark:bg-dark/20 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:transform hover:-translate-y-1">
-                                        <div className="relative aspect-square overflow-hidden">
-                                            <Image 
-                                                src={artwork.imageUrl} 
-                                                alt={artwork.title} 
-                                                fill
-                                                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                            />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                <div className="absolute bottom-4 left-4 right-4">
-                                                    <h3 className="text-white text-lg font-bold truncate">{artwork.title}</h3>
-                                                    <p className="text-white/80 text-sm line-clamp-2 mt-1">
-                                                        <MultiLangContent content={artwork.description} />
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="absolute top-3 right-3">
-                                                <span className="bg-black/60 text-white text-xs font-medium px-2 py-1 rounded-full backdrop-blur-sm">
-                                                    {t(`gallery.category.${artwork.category}`)}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="space-y-4">
-                            {filteredArtworks.map((artwork) => (
-                                <Link 
-                                    href={`/${artwork.category}/${artwork._id || artwork.id}`} 
-                                    key={artwork._id || artwork.id}
-                                    className="block"
-                                >
-                                    <div className="bg-light dark:bg-dark/20 rounded-lg overflow-hidden hover:shadow-md transition-shadow flex">
-                                        <div className="relative w-32 h-32 sm:w-48 sm:h-48 flex-shrink-0">
-                                            <Image 
-                                                src={artwork.imageUrl} 
-                                                alt={artwork.title} 
-                                                fill
-                                                className="object-cover"
-                                                sizes="(max-width: 640px) 33vw, 25vw"
-                                            />
-                                        </div>
-                                        <div className="p-4 flex flex-col justify-between w-full">
-                                            <div>
-                                                <div className="flex justify-between items-start">
-                                                    <h3 className="text-lg font-semibold mb-2">{artwork.title}</h3>
-                                                    <span className="text-xs bg-foreground/10 text-foreground/70 px-2 py-1 rounded-full">
-                                                        {t(`gallery.category.${artwork.category}`)}
-                                                    </span>
-                                                </div>
-                                                <p className="text-foreground/70 line-clamp-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {filteredArtworks.map((artwork) => (
+                            <Link 
+                                href={`/${artwork.category}/${artwork._id || artwork.id}`} 
+                                key={artwork._id || artwork.id}
+                                className="block group"
+                            >
+                                <div className="bg-light dark:bg-dark/20 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:transform hover:-translate-y-1">
+                                    <div className="relative aspect-square overflow-hidden">
+                                        <Image 
+                                            src={artwork.imageUrl} 
+                                            alt={artwork.title} 
+                                            fill
+                                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            <div className="absolute bottom-4 left-4 right-4">
+                                                <h3 className="text-white text-lg font-bold truncate">{artwork.title}</h3>
+                                                <p className="text-white/80 text-sm line-clamp-2 mt-1">
                                                     <MultiLangContent content={artwork.description} />
                                                 </p>
                                             </div>
-                                            <div className="mt-4 flex justify-between items-center">
-                                                <span className="text-sm text-foreground/60">{artwork.date}</span>
-                                                <span className="text-accent flex items-center text-sm">
-                                                    {t('artwork.viewDetails')}
-                                                    <svg className="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                                    </svg>
-                                                </span>
-                                            </div>
+                                        </div>
+                                        <div className="absolute top-3 right-3">
+                                            <span className="bg-black/60 text-white text-xs font-medium px-2 py-1 rounded-full backdrop-blur-sm">
+                                                {t(`gallery.category.${artwork.category}`)}
+                                            </span>
                                         </div>
                                     </div>
-                                </Link>
-                            ))}
-                        </div>
-                    )
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
                 ) : (
                     <div className="bg-light dark:bg-dark/20 p-8 rounded-lg text-center mt-6">
                         <svg className="h-16 w-16 mx-auto text-muted mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

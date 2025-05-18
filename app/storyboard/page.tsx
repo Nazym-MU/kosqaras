@@ -16,16 +16,11 @@ export default function StoryboardPage() {
             
             {/* Gallery Section */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-                <div className="flex justify-between items-center mb-10">
+                <div className="mb-10">
                     <h2 className="text-2xl font-bold">Gallery</h2>
-                    <div className="flex items-center gap-2 text-sm text-foreground/70">
-                        <span>View:</span>
-                        <button className="p-2 bg-accent/10 text-accent rounded">Grid</button>
-                        <button className="p-2 hover:bg-accent/10 hover:text-accent rounded transition-colors">List</button>
-                    </div>
                 </div>
                 <ArtworkGrid category="storyboard" />
             </div>
         </div>
     );
-} 
+}
