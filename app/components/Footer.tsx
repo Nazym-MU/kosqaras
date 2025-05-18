@@ -81,9 +81,6 @@ export default function Footer() {
                     <p className="text-foreground/60 text-sm">
                         &copy; {new Date().getFullYear()} KOSQARAS. All rights reserved.
                     </p>
-                    <p className="text-foreground/60 text-sm mt-2 md:mt-0">
-                        Designed with ❤️ for creative expressions
-                    </p>
                 </div>
             </div>
         </footer>

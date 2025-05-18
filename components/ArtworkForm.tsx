@@ -288,12 +288,27 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
     // Helper to get the description/additionalInfo value according to language
     const getMultilingualValue = (field: 'description' | 'additionalInfo', lang: string): string => {
         const value = formData[field];
+        
+        // Handle undefined or null value
+        if (!value) {
+            return '';
+        }
+        
+        // Handle string value
         if (typeof value === 'string') {
             return value;
         }
         
+        // Handle multilingual value
         const multilingual = value as MultilingualString;
-        return multilingual[lang as keyof MultilingualString] || '';
+        
+        // Check if the specified language property exists
+        if (multilingual && lang in multilingual && multilingual[lang as keyof MultilingualString]) {
+            return multilingual[lang as keyof MultilingualString] || '';
+        }
+        
+        // Default to English or empty string if nothing is available
+        return multilingual?.en || '';
     };
 
     return (

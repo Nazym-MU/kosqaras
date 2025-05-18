@@ -2,16 +2,17 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
+import { MultilingualString } from '@/types/artwork';
 
 interface Artwork {
   _id: string;
   title: string;
   imageUrl: string;
   category: string;
-  description: string;
+  description: MultilingualString | string;
   date: string;
   media: string;
-  additionalInfo?: string;
+  additionalInfo?: MultilingualString | string;
 }
 
 interface ArtworkListProps {
@@ -78,9 +79,28 @@ export default function ArtworkList({ onEdit }: ArtworkListProps) {
     }
   };
 
+  // Helper function to extract text from multilingual content
+  const getTextFromMultilingual = (content: string | MultilingualString | undefined): string => {
+    // Handle undefined or null content
+    if (!content) {
+      return '';
+    }
+    
+    // Handle string content
+    if (typeof content === 'string') {
+      return content;
+    }
+    
+    // Handle multilingual content - safely access the 'en' property
+    return content.en || '';
+  };
+
   const filteredArtworks = artworks.filter(artwork => {
-    return artwork.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-           artwork.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const title = artwork.title.toLowerCase();
+    const description = getTextFromMultilingual(artwork.description).toLowerCase();
+    const term = searchTerm.toLowerCase();
+    
+    return title.includes(term) || description.includes(term);
   });
 
   if (isLoading) {
@@ -182,7 +202,7 @@ export default function ArtworkList({ onEdit }: ArtworkListProps) {
                   <span className="text-sm text-gray-500">{artwork.date}</span>
                 </div>
                 
-                <p className="text-gray-600 text-sm line-clamp-2 mb-3">{artwork.description}</p>
+                <p className="text-gray-600 text-sm line-clamp-2 mb-3">{getTextFromMultilingual(artwork.description)}</p>
                 
                 <div className="flex justify-between mt-2">
                   <button

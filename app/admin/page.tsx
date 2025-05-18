@@ -4,16 +4,17 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import ArtworkForm from '@/components/ArtworkForm';
 import ArtworkList from '@/components/artworkList';
+import { MultilingualString } from '@/types/artwork';
 
 interface Artwork {
     _id?: string;
     title: string;
-    description: string;
+    description: MultilingualString | string;
     category: string;
     date: string;
     media: string;
     imageUrl: string;
-    additionalInfo?: string;
+    additionalInfo?: MultilingualString | string;
 }
 
 export default function AdminPage() {
