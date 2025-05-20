@@ -8,9 +8,6 @@ export default function AnimationPage() {
                 <div className="absolute inset-0 opacity-20 bg-pattern"></div>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white tracking-tight">Animations</h1>
-                    <p className="text-lg md:text-xl text-white/80 max-w-2xl">
-                        Discover my animated creations that bring characters and stories to life through motion and expression.
-                    </p>
                 </div>
             </div>
             

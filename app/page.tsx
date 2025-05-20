@@ -8,31 +8,23 @@ export default function Home() {
   
   return (
     <div className="min-h-screen">
-      {/* Hero Section with Improved Image Layout */}
       <div className="relative w-full h-[85vh] mb-12">
         <div className="absolute inset-0 bg-gradient-to-b from-dark/30 to-dark/70 z-10 flex flex-col justify-center items-center text-white px-4 sm:px-6 lg:px-8">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-center tracking-tight">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-center tracking-tight text-accent">
             KOSQARAS
           </h1>
-          <p className="text-xl md:text-2xl max-w-2xl text-center text-white/90 leading-relaxed">
-            {t('home.hero.subtitle')}
-          </p>
           <div className="mt-10 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-            <Link href="/gallery" className="bg-accent hover:bg-accent/90 text-white px-8 py-3 rounded-md font-medium transition-colors">
+            <Link 
+              href="/gallery" 
+              className="relative overflow-hidden bg-transparent border-2 border-[#9DD9F3] text-[#9DD9F3] px-8 py-3 rounded-md font-medium transition-all duration-300 
+              hover:bg-[#9DD9F3]/10 hover:text-white hover:shadow-[0_0_15px_#9DD9F3/60] 
+              before:content-[''] before:absolute before:top-0 before:left-0 before:w-0 before:h-full before:bg-[#9DD9F3]/20 before:transition-all before:duration-500 
+              hover:before:w-full"
+            >
               {t('home.cta.gallery')}
-            </Link>
-            <Link href="/about" className="bg-white/20 backdrop-blur hover:bg-white/30 text-white px-8 py-3 rounded-md font-medium transition-colors">
-              {t('home.cta.about')}
             </Link>
           </div>
         </div>
-        <Image
-          src="/main-image.jpg"
-          alt="KOSQARAS Art Portfolio"
-          fill
-          className="object-cover"
-          priority
-        />
       </div>
 
       {/* Categories Section */}
@@ -104,29 +96,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="md:w-1/2">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">{t('home.about.title')}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">{t('about.title')}</h2>
               <p className="text-lg text-foreground/80 leading-relaxed mb-6">
                 {t('home.about.p1')}
               </p>
-              <p className="text-lg text-foreground/80 leading-relaxed mb-8">
-                {t('home.about.p2')}
-              </p>
-              <Link href="/about" className="inline-flex items-center text-accent hover:text-accent/80 font-medium">
-                {t('home.about.learnMore')}
-                <svg className="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </Link>
-            </div>
-            <div className="md:w-1/2 mt-8 md:mt-0">
-              <div className="relative h-80 md:h-96 rounded-lg overflow-hidden shadow-xl">
-                <Image
-                  src="/main-image.jpg"
-                  alt="Artist at work"
-                  fill
-                  className="object-cover"
-                />
-              </div>
             </div>
           </div>
         </div>
