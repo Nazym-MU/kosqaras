@@ -94,9 +94,6 @@ export default function Gallery() {
                 <div className="absolute inset-0 opacity-20 bg-pattern"></div>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white tracking-tight">{t('gallery.title')}</h1>
-                    <p className="text-lg md:text-xl text-white/80 max-w-2xl">
-                        {t('gallery.subtitle')}
-                    </p>
                 </div>
             </div>
             {/* Gallery Section */}
@@ -145,14 +142,6 @@ export default function Gallery() {
                                             className="object-cover transition-transform duration-500 group-hover:scale-105"
                                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                            <div className="absolute bottom-4 left-4 right-4">
-                                                <h3 className="text-white text-lg font-bold truncate">{artwork.title}</h3>
-                                                <p className="text-white/80 text-sm line-clamp-2 mt-1">
-                                                    <MultiLangContent content={artwork.description} />
-                                                </p>
-                                            </div>
-                                        </div>
                                         <div className="absolute top-3 right-3">
                                             <span className="bg-black/60 text-white text-xs font-medium px-2 py-1 rounded-full backdrop-blur-sm">
                                                 {t(`gallery.category.${artwork.category}`)}

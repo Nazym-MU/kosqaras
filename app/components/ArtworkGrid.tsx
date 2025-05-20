@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLanguage } from '@/app/contexts/LanguageContext';
-import MultiLangContent from '@/app/components/MultiLangContent';
 import type { Artwork as ArtworkType } from '@/types/artwork';
 
 interface ArtworkGridProps {
@@ -106,11 +105,8 @@ export default function ArtworkGrid({ category }: ArtworkGridProps) {
                         </div>
                         <div className="p-6">
                             <h3 className="text-xl font-bold mb-2 group-hover:text-accent transition-colors">{artwork.title}</h3>
-                            <p className="text-foreground/70 line-clamp-2">
-                                <MultiLangContent content={artwork.description} />
-                            </p>
                             <div className="mt-4 flex justify-between items-center">
-                                <span className="text-xs uppercase tracking-wider inline-block bg-foreground/10 text-foreground/70 px-3 py-1 rounded-full">
+                                <span className="text-xs uppercase tracking-wider inline-block bg-foreground/10 text-accent px-3 py-1 border border-accent/20 rounded-lg">
                                     {category}
                                 </span>
                                 <span className="text-accent font-medium group-hover:translate-x-1 transition-transform inline-flex items-center">

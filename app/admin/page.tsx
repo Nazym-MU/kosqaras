@@ -9,12 +9,11 @@ import { MultilingualString } from '@/types/artwork';
 interface Artwork {
     _id?: string;
     title: string;
-    description: MultilingualString | string;
     category: string;
     date: string;
     media: string;
     imageUrl: string;
-    additionalInfo?: MultilingualString | string;
+    videoUrl?: string;
 }
 
 export default function AdminPage() {

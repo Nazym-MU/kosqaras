@@ -221,11 +221,6 @@ export const translations: Record<string, Record<Language, string>> = {
     kz: 'Галерея',
     ru: 'Галерея'
   },
-  'gallery.subtitle': {
-    en: 'Browse through my complete collection of artwork across all categories.',
-    kz: 'Барлық санаттағы өнер туындыларымның толық жинағын шолыңыз.',
-    ru: 'Просмотрите мою полную коллекцию работ по всем категориям.'
-  },
   'gallery.loading': {
     en: 'Loading artworks...',
     kz: 'Өнер туындылары жүктелуде...',

@@ -34,10 +34,6 @@ const artworkSchema = new mongoose.Schema({
         required: true,
         enum: ['illustration', 'animation', 'storyboard'],
     },
-    description: {
-        type: multilingualStringSchema,
-        required: true,
-    },
     date: {
         type: String,
         required: true,
@@ -45,9 +41,6 @@ const artworkSchema = new mongoose.Schema({
     media: {
         type: String,
         required: true,
-    },
-    additionalInfo: {
-        type: multilingualStringSchema,
     },
 }, {
     timestamps: true,

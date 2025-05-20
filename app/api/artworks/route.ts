@@ -41,11 +41,6 @@ export async function POST(request: Request) {
             missingFields.push('imageUrl');
         }
         
-        // Check if description exists and has English text
-        if (!body.description || (typeof body.description === 'object' && !body.description.en)) {
-            missingFields.push('description');
-        }
-        
         if (missingFields.length > 0) {
             return NextResponse.json(
                 { 
@@ -58,27 +53,13 @@ export async function POST(request: Request) {
         
         await connectDB();
 
-        // Format description to ensure it's a multilingual object
-        let description = body.description;
-        if (typeof description === 'string') {
-            description = { en: description, kz: '', ru: '' };
-        }
-        
-        // Format additionalInfo to ensure it's a multilingual object if it exists
-        let additionalInfo = body.additionalInfo || { en: '', kz: '', ru: '' };
-        if (typeof additionalInfo === 'string') {
-            additionalInfo = { en: additionalInfo, kz: '', ru: '' };
-        }
-
         const artwork = await Artwork.create({
             title: body.title,
             imageUrl: body.imageUrl,
             videoUrl: body.videoUrl || '',
             category: body.category,
-            description: description,
             date: body.date,
             media: body.media,
-            additionalInfo: additionalInfo,
         });
 
         return NextResponse.json(JSON.parse(JSON.stringify(artwork)), { status: 201 });

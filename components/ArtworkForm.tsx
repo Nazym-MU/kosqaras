@@ -2,18 +2,15 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useLanguage } from '@/app/contexts/LanguageContext';
-import type { MultilingualString } from '@/types/artwork';
 
 interface Artwork {
     _id?: string;
     title: string;
-    description: MultilingualString | string;
     category: string;
     date: string;
     media: string;
     imageUrl: string;
     videoUrl?: string;
-    additionalInfo?: MultilingualString | string;
 }
 
 interface ArtworkFormProps {
@@ -22,21 +19,13 @@ interface ArtworkFormProps {
     onCancel: () => void;
 }
 
-const defaultMultilingual: MultilingualString = {
-    en: '',
-    kz: '',
-    ru: '',
-};
-
 const defaultArtwork: Artwork = {
     title: '',
-    description: defaultMultilingual,
     category: 'illustration',
     date: '',
     media: '',
     imageUrl: '',
     videoUrl: '',
-    additionalInfo: defaultMultilingual,
 };
 
 export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCancel }: ArtworkFormProps) {
@@ -49,66 +38,16 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
     
     const isEditing = !!artwork._id;
 
-    // When component loads, ensure description and additionalInfo are multilingual
     useEffect(() => {
-        const updatedArtwork = { ...artwork };
-        
-        // Convert description to multilingual if it's a string
-        if (typeof updatedArtwork.description === 'string') {
-            updatedArtwork.description = {
-                en: updatedArtwork.description,
-                kz: '',
-                ru: '',
-            };
-        }
-        
-        // Convert additionalInfo to multilingual if it's a string and exists
-        if (updatedArtwork.additionalInfo && typeof updatedArtwork.additionalInfo === 'string') {
-            updatedArtwork.additionalInfo = {
-                en: updatedArtwork.additionalInfo,
-                kz: '',
-                ru: '',
-            };
-        } else if (!updatedArtwork.additionalInfo) {
-            updatedArtwork.additionalInfo = defaultMultilingual;
-        }
-        
-        setFormData(updatedArtwork);
-        setPreviewUrl(updatedArtwork.imageUrl || null);
+        setFormData(artwork);
+        setPreviewUrl(artwork.imageUrl || null);
     }, [artwork]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         
-        // Handle multilingual fields
-        if (name.includes('.')) {
-            const [field, lang] = name.split('.');
-            
-            setFormData(prev => {
-                // Create a new object to avoid mutating the previous state
-                const prevValue = prev[field as keyof Artwork];
-                
-                // Handle multilingual fields (description and additionalInfo)
-                if (field === 'description' || field === 'additionalInfo') {
-                    const updatedField = {
-                        ...(typeof prevValue === 'string' 
-                            ? { en: prevValue, kz: '', ru: '' } 
-                            : prevValue as MultilingualString),
-                        [lang]: value
-                    };
-                    
-                    return {
-                        ...prev,
-                        [field]: updatedField
-                    };
-                }
-                
-                return prev;
-            });
-        } else {
-            // Handle regular fields
-            setFormData(prev => ({ ...prev, [name]: value }));
-        }
+        // Handle regular fields
+        setFormData(prev => ({ ...prev, [name]: value }));
         
         // Clear error when field is edited
         if (errors[name]) {
@@ -144,13 +83,6 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
         const newErrors: Record<string, string> = {};
         
         if (!formData.title.trim()) newErrors.title = 'Title is required';
-        
-        // Validate description in English at minimum
-        const description = formData.description as MultilingualString;
-        if (!description.en.trim()) {
-            newErrors['description.en'] = 'English description is required';
-        }
-        
         if (!formData.date) newErrors.date = 'Date is required';
         if (!formData.media.trim()) newErrors.media = 'Media information is required';
         
@@ -285,32 +217,6 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
         }
     };
 
-    // Helper to get the description/additionalInfo value according to language
-    const getMultilingualValue = (field: 'description' | 'additionalInfo', lang: string): string => {
-        const value = formData[field];
-        
-        // Handle undefined or null value
-        if (!value) {
-            return '';
-        }
-        
-        // Handle string value
-        if (typeof value === 'string') {
-            return value;
-        }
-        
-        // Handle multilingual value
-        const multilingual = value as MultilingualString;
-        
-        // Check if the specified language property exists
-        if (multilingual && lang in multilingual && multilingual[lang as keyof MultilingualString]) {
-            return multilingual[lang as keyof MultilingualString] || '';
-        }
-        
-        // Default to English or empty string if nothing is available
-        return multilingual?.en || '';
-    };
-
     return (
         <form onSubmit={handleSubmit} className="space-y-6 bg-white shadow-md rounded-lg p-6">
             <h2 className="text-2xl font-bold mb-6 text-gray-600">{isEditing ? 'Edit Artwork' : 'Add New Artwork'}</h2>
@@ -409,113 +315,6 @@ export default function ArtworkForm({ artwork = defaultArtwork, onSubmit, onCanc
                 </div>
                 
                 <div className="space-y-4">
-                    {/* Description fields for each language */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            {t('admin.form.description')} *
-                        </label>
-                        
-                        <div className="mb-3">
-                            <div className="flex justify-between items-center mb-1">
-                                <span className="text-xs font-medium text-gray-500">English (Required)</span>
-                                <span className="text-xs font-medium px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded">EN</span>
-                            </div>
-                            <textarea
-                                id="description-en"
-                                name="description.en"
-                                value={getMultilingualValue('description', 'en')}
-                                onChange={handleChange}
-                                rows={2}
-                                className={`w-full px-3 py-2 border rounded-md text-gray-900 ${
-                                    errors['description.en'] ? 'border-red-500' : 'border-gray-300'
-                                }`}
-                            />
-                            {errors['description.en'] && <p className="mt-1 text-xs text-red-500">{errors['description.en']}</p>}
-                        </div>
-                        
-                        <div className="mb-3">
-                            <div className="flex justify-between items-center mb-1">
-                                <span className="text-xs font-medium text-gray-500">Kazakh</span>
-                                <span className="text-xs font-medium px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded">KZ</span>
-                            </div>
-                            <textarea
-                                id="description-kz"
-                                name="description.kz"
-                                value={getMultilingualValue('description', 'kz')}
-                                onChange={handleChange}
-                                rows={2}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900"
-                            />
-                        </div>
-                        
-                        <div>
-                            <div className="flex justify-between items-center mb-1">
-                                <span className="text-xs font-medium text-gray-500">Russian</span>
-                                <span className="text-xs font-medium px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded">RU</span>
-                            </div>
-                            <textarea
-                                id="description-ru"
-                                name="description.ru"
-                                value={getMultilingualValue('description', 'ru')}
-                                onChange={handleChange}
-                                rows={2}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900"
-                            />
-                        </div>
-                    </div>
-                    
-                    {/* Additional Information fields for each language */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            {t('admin.form.additionalInfo')}
-                        </label>
-                        
-                        <div className="mb-3">
-                            <div className="flex justify-between items-center mb-1">
-                                <span className="text-xs font-medium text-gray-500">English</span>
-                                <span className="text-xs font-medium px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded">EN</span>
-                            </div>
-                            <textarea
-                                id="additionalInfo-en"
-                                name="additionalInfo.en"
-                                value={getMultilingualValue('additionalInfo', 'en')}
-                                onChange={handleChange}
-                                rows={2}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900"
-                            />
-                        </div>
-                        
-                        <div className="mb-3">
-                            <div className="flex justify-between items-center mb-1">
-                                <span className="text-xs font-medium text-gray-500">Kazakh</span>
-                                <span className="text-xs font-medium px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded">KZ</span>
-                            </div>
-                            <textarea
-                                id="additionalInfo-kz"
-                                name="additionalInfo.kz"
-                                value={getMultilingualValue('additionalInfo', 'kz')}
-                                onChange={handleChange}
-                                rows={2}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900"
-                            />
-                        </div>
-                        
-                        <div>
-                            <div className="flex justify-between items-center mb-1">
-                                <span className="text-xs font-medium text-gray-500">Russian</span>
-                                <span className="text-xs font-medium px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded">RU</span>
-                            </div>
-                            <textarea
-                                id="additionalInfo-ru"
-                                name="additionalInfo.ru"
-                                value={getMultilingualValue('additionalInfo', 'ru')}
-                                onChange={handleChange}
-                                rows={2}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900"
-                            />
-                        </div>
-                    </div>
-                    
                     <div>
                         <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">
                             {isEditing ? t('admin.form.changeImage') : t('admin.form.image') + ' *'}

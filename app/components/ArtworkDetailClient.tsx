@@ -4,7 +4,6 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import ArtworkMedia from '@/app/components/ArtworkMedia';
 import { useLanguage } from '@/app/contexts/LanguageContext';
-import MultiLangContent from '@/app/components/MultiLangContent';
 import { Artwork } from '@/types/artwork';
 
 interface DetailViewProps {
@@ -45,7 +44,7 @@ export default function ArtworkDetailClientWrapper({ artwork }: DetailViewProps)
             <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            {t('artwork.backTo')} {category.charAt(0).toUpperCase() + category.slice(1)}
+            {t('artwork.backTo')}
           </Link>
         </div>
 
@@ -64,12 +63,6 @@ export default function ArtworkDetailClientWrapper({ artwork }: DetailViewProps)
             </div>
 
             <div className="space-y-8">
-              <div className="prose prose-lg max-w-none">
-                <p className="text-lg leading-relaxed text-foreground/90">
-                  <MultiLangContent content={artwork.description} />
-                </p>
-              </div>
-
               <div className="bg-background p-6 rounded-lg grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <div className="space-y-2">
                   <h3 className="text-sm uppercase tracking-wider text-foreground/60">{t('artwork.date')}</h3>
@@ -84,15 +77,6 @@ export default function ArtworkDetailClientWrapper({ artwork }: DetailViewProps)
                   <p className="font-medium">{category.charAt(0).toUpperCase() + category.slice(1)}</p>
                 </div>
               </div>
-
-              {artwork.additionalInfo && (
-                <div className="bg-background p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-3">{t('artwork.additionalInfo')}</h3>
-                  <p className="text-foreground/80">
-                    <MultiLangContent content={artwork.additionalInfo} />
-                  </p>
-                </div>
-              )}
               
               <div className="flex justify-between items-center border-t border-muted/20 pt-6">
                 <Link
