@@ -55,30 +55,15 @@ export const translations: Record<string, Record<Language, string>> = {
     kz: 'Иллюстрация',
     ru: 'Иллюстрация'
   },
-  'home.category.illustration.desc': {
-    en: 'Explore my illustration work across various styles and techniques.',
-    kz: 'Әр түрлі стильдер мен техникалардағы иллюстрация жұмыстарымды шолыңыз.',
-    ru: 'Изучите мои иллюстрации в различных стилях и техниках.'
-  },
   'home.category.animation': {
     en: 'Animation',
     kz: 'Анимация',
     ru: 'Анимация'
   },
-  'home.category.animation.desc': {
-    en: 'Discover animated stories and characters brought to life.',
-    kz: 'Анимациялық оқиғалар мен кейіпкерлердің тіршілігін ашыңыз.',
-    ru: 'Откройте для себя анимированные истории и персонажей, воплощенных в жизнь.'
-  },
   'home.category.storyboard': {
     en: 'Storyboard',
     kz: 'Сториборд',
     ru: 'Раскадровка'
-  },
-  'home.category.storyboard.desc': {
-    en: 'See how visual narratives are planned and developed.',
-    kz: 'Визуалды баяндаулардың қалай жоспарланып, дамытылатынын көріңіз.',
-    ru: 'Посмотрите, как планируются и разрабатываются визуальные повествования.'
   },
   'home.about.p1': {
     en: 'My name is Ayanat Zhiyengali, I am  aspiring to become an artist/animator with a particular interest in 2D.',

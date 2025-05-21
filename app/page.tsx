@@ -46,7 +46,6 @@ export default function Home() {
               </div>
               <div className="p-6">
                 <h3 className="text-2xl font-bold mb-2 group-hover:text-accent transition-colors">{t('home.category.illustration')}</h3>
-                <p className="text-foreground/70">{t('home.category.illustration.desc')}</p>
               </div>
             </div>
           </Link>
@@ -65,7 +64,6 @@ export default function Home() {
               </div>
               <div className="p-6">
                 <h3 className="text-2xl font-bold mb-2 group-hover:text-accent transition-colors">{t('home.category.animation')}</h3>
-                <p className="text-foreground/70">{t('home.category.animation.desc')}</p>
               </div>
             </div>
           </Link>
@@ -84,7 +82,6 @@ export default function Home() {
               </div>
               <div className="p-6">
                 <h3 className="text-2xl font-bold mb-2 group-hover:text-accent transition-colors">{t('home.category.storyboard')}</h3>
-                <p className="text-foreground/70">{t('home.category.storyboard.desc')}</p>
               </div>
             </div>
           </Link>
