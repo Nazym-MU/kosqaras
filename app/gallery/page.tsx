@@ -47,9 +47,6 @@ export default function Gallery() {
                     <div className="absolute inset-0 opacity-20 bg-pattern"></div>
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                         <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white tracking-tight">{t('gallery.title')}</h1>
-                        <p className="text-lg md:text-xl text-white/80 max-w-2xl">
-                            {t('gallery.subtitle')}
-                        </p>
                     </div>
                 </div>
                 <div className="flex justify-center items-center min-h-[300px]">
@@ -69,9 +66,6 @@ export default function Gallery() {
                     <div className="absolute inset-0 opacity-20 bg-pattern"></div>
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                         <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white tracking-tight">{t('gallery.title')}</h1>
-                        <p className="text-lg md:text-xl text-white/80 max-w-2xl">
-                            {t('gallery.subtitle')}
-                        </p>
                     </div>
                 </div>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

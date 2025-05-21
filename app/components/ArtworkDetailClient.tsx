@@ -50,10 +50,7 @@ export default function ArtworkDetailClientWrapper({ artwork }: DetailViewProps)
 
         <div className="bg-light dark:bg-dark/20 rounded-xl overflow-hidden shadow-xl mb-12">
           <div className="p-6 sm:p-8 lg:p-10">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 tracking-tight">{artwork.title}</h1>
-            <div className="inline-block px-3 py-1 bg-accent/10 text-accent text-sm rounded-full mb-6">
-              {category.charAt(0).toUpperCase() + category.slice(1)}
-            </div>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-7 tracking-tight">{artwork.title}</h1>
 
             <div className="mb-8 rounded-lg overflow-hidden shadow-lg">
               <ArtworkMedia 
