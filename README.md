@@ -22,40 +22,9 @@ KOSQARAS is a modern, multilingual artist portfolio website built with Next.js 1
 - **Database**: [MongoDB](https://www.mongodb.com/) with Mongoose
 - **Authentication**: [NextAuth.js](https://next-auth.js.org/)
 - **Media Storage**: [Cloudinary](https://cloudinary.com/)
-- **Deployment**: [Vercel](https://vercel.com/) (recommended)
+- **Deployment**: [Vercel](https://vercel.com/)
 - **Icons**: [React Icons](https://react-icons.github.io/react-icons/)
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18.x or later
-- npm or yarn
-- MongoDB database
-- Cloudinary account (for image uploads)
-
-### Environment Variables
-
-Create a `.env.local` file in the root directory with the following variables:
-
-```
-# MongoDB
-MONGODB_URI=your_mongodb_connection_string
-
-# NextAuth
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your_nextauth_secret
-
-# Admin Credentials
-ADMIN_USERNAME=your_admin_username
-ADMIN_PASSWORD=your_admin_password
-
-# Cloudinary
-NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=your_upload_preset
-```
 
 ## Google Drive Video Integration for Animations
 
@@ -98,8 +67,6 @@ types/               # TypeScript type definitions
 
 The application supports three languages: English (en), Kazakh (kz), and Russian (ru). Translations are managed through the Language Context system located in `app/contexts/LanguageContext.tsx`.
 
-Content can be added in multiple languages using the `MultiLangContent` component, which automatically displays the content in the user's selected language.
-
 ## Artwork Management
 
 Artworks are categorized into:
@@ -109,13 +76,11 @@ Artworks are categorized into:
 
 Each artwork can have:
 - Title
-- Description (multilingual)
 - Category
 - Image URL
 - Video URL (for animations)
 - Creation date
 - Media type
-- Additional information (multilingual)
 
 ## Development
 
